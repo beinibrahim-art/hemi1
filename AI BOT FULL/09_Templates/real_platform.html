@@ -1,0 +1,2344 @@
+<!DOCTYPE html>
+<html lang="ar" dir="rtl">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>🚀 REAL Trading Platform</title>
+    <style>
+        * { margin: 0; padding: 0; box-sizing: border-box; }
+        body {
+            font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+            background: #0f172a;
+            color: #e2e8f0;
+            padding: 20px;
+        }
+        .container { max-width: 1800px; margin: 0 auto; }
+        .header {
+            background: linear-gradient(135deg, #1e293b 0%, #334155 100%);
+            padding: 30px;
+            border-radius: 15px;
+            box-shadow: 0 10px 30px rgba(0,0,0,0.5);
+            margin-bottom: 20px;
+        }
+        .header h1 {
+            color: #10b981;
+            font-size: 2.5em;
+            text-align: center;
+            margin-bottom: 10px;
+        }
+        .status-bar {
+            display: flex;
+            justify-content: space-around;
+            margin-top: 20px;
+            padding: 15px;
+            background: rgba(16, 185, 129, 0.1);
+            border-radius: 10px;
+        }
+        .status-item {
+            display: flex;
+            align-items: center;
+            gap: 10px;
+            font-size: 1.1em;
+        }
+        .indicator {
+            width: 16px;
+            height: 16px;
+            border-radius: 50%;
+            display: inline-block;
+        }
+        .connected { background: #10b981; box-shadow: 0 0 15px #10b981; animation: pulse 2s infinite; }
+        .disconnected { background: #ef4444; }
+        .active { background: #f59e0b; animation: pulse 1.5s infinite; }
+        @keyframes pulse {
+            0%, 100% { opacity: 1; }
+            50% { opacity: 0.5; }
+        }
+        .grid { display: grid; grid-template-columns: repeat(auto-fit, minmax(400px, 1fr)); gap: 20px; margin: 20px 0; }
+        .card {
+            background: #1e293b;
+            padding: 25px;
+            border-radius: 15px;
+            box-shadow: 0 5px 20px rgba(0,0,0,0.3);
+            border: 1px solid #334155;
+        }
+        .card h2 {
+            color: #10b981;
+            font-size: 1.5em;
+            margin-bottom: 20px;
+            border-bottom: 2px solid #10b981;
+            padding-bottom: 10px;
+        }
+        input, select {
+            width: 100%;
+            padding: 15px;
+            margin: 10px 0;
+            background: #0f172a;
+            border: 2px solid #334155;
+            border-radius: 10px;
+            color: #e2e8f0;
+            font-size: 16px;
+        }
+        input:focus, select:focus {
+            outline: none;
+            border-color: #10b981;
+        }
+        button {
+            width: 100%;
+            padding: 15px;
+            background: linear-gradient(135deg, #10b981, #059669);
+            color: white;
+            border: none;
+            border-radius: 10px;
+            font-size: 16px;
+            font-weight: bold;
+            cursor: pointer;
+            margin: 10px 0;
+            transition: all 0.3s;
+        }
+        button:hover {
+            transform: translateY(-2px);
+            box-shadow: 0 5px 15px rgba(16, 185, 129, 0.4);
+        }
+        button:disabled {
+            background: #475569;
+            cursor: not-allowed;
+        }
+        .btn-danger { background: linear-gradient(135deg, #ef4444, #dc2626); }
+        .btn-danger:hover { box-shadow: 0 5px 15px rgba(239, 68, 68, 0.4); }
+        .file-upload {
+            border: 3px dashed #10b981;
+            padding: 40px;
+            text-align: center;
+            border-radius: 10px;
+            cursor: pointer;
+            background: rgba(16, 185, 129, 0.05);
+            transition: all 0.3s;
+        }
+        .file-upload:hover {
+            background: rgba(16, 185, 129, 0.1);
+            border-color: #059669;
+        }
+        .file-upload input { display: none; }
+        .alert {
+            padding: 15px;
+            border-radius: 10px;
+            margin: 15px 0;
+            font-size: 0.95em;
+        }
+        .alert-success { background: rgba(16, 185, 129, 0.2); color: #10b981; border: 1px solid #10b981; }
+        .alert-error { background: rgba(239, 68, 68, 0.2); color: #ef4444; border: 1px solid #ef4444; }
+        .alert-info { background: rgba(59, 130, 246, 0.2); color: #3b82f6; border: 1px solid #3b82f6; }
+        .stat-box {
+            background: linear-gradient(135deg, #1e293b, #334155);
+            padding: 20px;
+            border-radius: 10px;
+            margin: 10px 0;
+            border: 1px solid #10b981;
+        }
+        .stat-box h3 {
+            font-size: 2.5em;
+            color: #10b981;
+            margin: 10px 0;
+        }
+        .stat-box p {
+            color: #94a3b8;
+            font-size: 1em;
+        }
+        .trade-item {
+            background: rgba(30, 41, 59, 0.5);
+            padding: 15px;
+            margin: 10px 0;
+            border-radius: 10px;
+            border-right: 4px solid #10b981;
+        }
+        .executed-log {
+            background: #0f172a;
+            border: 1px solid #334155;
+            border-radius: 10px;
+            padding: 10px;
+            max-height: 420px;
+            overflow-y: auto;
+        }
+        .executed-entry {
+            border-bottom: 1px solid #1e293b;
+            padding: 10px 5px;
+        }
+        .executed-entry:last-child {
+            border-bottom: none;
+        }
+        .executed-entry strong {
+            color: #10b981;
+        }
+        .executed-meta {
+            color: #94a3b8;
+            font-size: 0.85em;
+        }
+        .log {
+            background: #0f172a;
+            padding: 15px;
+            border-radius: 10px;
+            font-family: 'Courier New', monospace;
+            font-size: 0.9em;
+            max-height: 300px;
+            overflow-y: auto;
+            border: 1px solid #334155;
+        }
+        .log p {
+            margin: 5px 0;
+            padding: 3px 0;
+            border-bottom: 1px solid #1e293b;
+            color: #10b981;
+        }
+        .full-width { grid-column: 1 / -1; }
+    </style>
+</head>
+<body>
+    <div class="container">
+        <div class="header">
+            <h1>🚀 REAL Trading Platform</h1>
+            <p style="text-align: center; color: #94a3b8; font-size: 1.2em;">
+                منصة تداول حقيقية متكاملة مع ProjectX API
+            </p>
+            <div class="status-bar">
+                <div class="status-item">
+                    <span class="indicator" id="connIndicator"></span>
+                    <span>ProjectX: <strong id="connText">Disconnected</strong></span>
+                </div>
+                <div class="status-item">
+                    <span class="indicator" id="modelIndicator"></span>
+                    <span>ML Model: <strong id="modelText">Not Loaded</strong></span>
+                </div>
+                <div class="status-item">
+                    <span class="indicator" id="tradeIndicator"></span>
+                    <span>Trading: <strong id="tradeText">Stopped</strong></span>
+                </div>
+            </div>
+        </div>
+
+        <div class="grid">
+            <!-- Connection -->
+            <div class="card">
+                <h2>🔐 الاتصال بـ ProjectX API</h2>
+                <select id="env">
+                    <option value="TOPSTEP_X">TopStep</option>
+                    <option value="E8X">E8X</option>
+                    <option value="FUNDING_FUTURES">Funding Futures</option>
+                    <option value="FXIFY_FUTURES">FXIFY Futures</option>
+                    <option value="ALPHA_TICKS">Alpha Ticks</option>
+                    <option value="BLUE_GUARDIAN">Blue Guardian</option>
+                    <option value="BLUSKY">Blusky</option>
+                    <option value="FUTURES_ELITE">Futures Elite</option>
+                    <option value="GOAT_FUNDED">Goat Funded</option>
+                    <option value="THE_FUTURES_DESK">The Futures Desk</option>
+                    <option value="TICK_TICK_TRADER">Tick Tick Trader</option>
+                    <option value="TOP_ONE_FUTURES">Top One Futures</option>
+                    <option value="TX3_FUNDING">TX3 Funding</option>
+                </select>
+                <input type="text" id="username" placeholder="Username">
+                <input type="password" id="apiKey" placeholder="API Key">
+                <button onclick="connect()" id="connectBtn">🔗 اتصال حقيقي</button>
+                <button onclick="disconnect()" id="disconnectBtn" class="btn-danger" style="display:none;">⛔ قطع الاتصال</button>
+                <div id="connAlert"></div>
+                
+                <!-- Account Selection -->
+                <div id="accountSelection" style="display:none; margin-top:15px;">
+                    <label style="display:block; margin:10px 0; font-weight:bold; color:#10b981;">اختر الحساب:</label>
+                    <select id="accountSelect" style="width:100%; padding:12px; margin:5px 0;">
+                        <option value="">-- اختر الحساب --</option>
+                    </select>
+                    <button onclick="selectAccount()" style="width:100%; margin-top:10px;">✅ اختيار الحساب</button>
+                </div>
+            </div>
+
+            <!-- Model Upload -->
+            <div class="card">
+                <h2>🤖 رفع ML Model</h2>
+                <div class="file-upload" onclick="document.getElementById('modelFile').click()">
+                    <input type="file" id="modelFile" accept=".pkl" onchange="uploadModel()">
+                    <div style="font-size: 3em; margin-bottom: 10px;">📤</div>
+                    <p style="font-size: 1.1em; font-weight: 600; color: #10b981;">اسحب ملف .pkl هنا</p>
+                </div>
+                <div id="modelAlert"></div>
+            </div>
+
+            <!-- Contract Selection -->
+            <div class="card" id="contractCard" style="display:none;">
+                <h2>📊 اختيار Contract</h2>
+                <select id="contractSelect" style="width:100%; padding:12px; margin:5px 0;">
+                    <option value="CON.F.US.EP.U25">ES (E-mini S&P 500)</option>
+                    <option value="CON.F.US.ENQ.U25">NQ (E-mini NASDAQ-100)</option>
+                    <option value="CON.F.US.RTY.U25">RTY (E-mini Russell 2000)</option>
+                </select>
+                <button onclick="selectContract()" style="width:100%; margin-top:10px;">✅ اختيار</button>
+                <div id="contractAlert"></div>
+            </div>
+
+            <!-- Trading Control -->
+            <div class="card">
+                <h2>⚡ التحكم بالتداول</h2>
+                <div class="alert alert-info">
+                    <strong>الإعدادات:</strong><br>
+                    Max Trades: 3/day<br>
+                    Max Loss: $1,000<br>
+                    Min Prob: 70%
+                </div>
+                <button onclick="startTrading()" id="startBtn" disabled>▶️ بدء تداول حقيقي</button>
+                <button onclick="stopTrading()" id="stopBtn" class="btn-danger" style="display:none;">⏸️ إيقاف</button>
+            </div>
+
+            <!-- ML Settings -->
+            <div class="card" id="settingsCard">
+                <h2>⚙️ إعدادات الموديل</h2>
+                <div class="alert alert-info" style="font-size:0.9em;">
+                    <strong>⚡ ML Thresholds:</strong> احتمال الصفقة، عدد الصفقات اليومية، الخسارة القصوى<br>
+                    <strong>🔍 Setup Detection:</strong> حساسية الاكتشاف (أقل = أكثر حساسية)، الحد الأدنى للشموع، momentum
+                </div>
+                <label>🔢 الحد الأدنى لاحتمال الصفقة (%)</label>
+                <input type="number" id="minProbInput" min="40" max="99" step="1" value="70">
+                <label>📈 أقصى عدد صفقات في اليوم</label>
+                <input type="number" id="maxTradesInput" min="1" max="10" step="1" value="3">
+                <label>💸 أقصى خسارة يومية (USD)</label>
+                <input type="number" id="maxLossInput" min="50" step="50" value="1000">
+                <label>📊 حساسية اكتشاف Setups (×StdDev) - أقل = أكثر حساسية</label>
+                <input type="number" id="thresholdMultInput" min="0.5" max="3.0" step="0.1" value="1.5">
+                <label>🕯️ الحد الأدنى للشموع المطلوبة</label>
+                <input type="number" id="minCandlesInput" min="10" max="50" step="1" value="20">
+                <label>⚡ الحد الأدنى لـ Momentum (Ticks)</label>
+                <input type="number" id="minMomentumInput" min="2" max="20" step="1" value="6">
+                <label style="display:flex; align-items:center; margin-top:15px;">
+                    <input type="checkbox" id="debugSetupInput" style="width:auto; margin-left:10px;">
+                    🔍 تفعيل Debug Mode (عرض تفاصيل اكتشاف Setups في السجلات)
+                </label>
+                <button onclick="saveSettings()">💾 حفظ الإعدادات</button>
+                <div id="settingsAlert"></div>
+            </div>
+
+            <!-- Account Info -->
+            <div class="card full-width">
+                <h2>💰 معلومات الحساب الحقيقية</h2>
+                <div class="grid" style="grid-template-columns: repeat(auto-fit, minmax(200px, 1fr));">
+                    <div class="stat-box">
+                        <p>الرصيد</p>
+                        <h3 id="balance">$0.00</h3>
+                    </div>
+                    <div class="stat-box">
+                        <p>P&L اليومي</p>
+                        <h3 id="dailyPnL">$0.00</h3>
+                    </div>
+                    <div class="stat-box">
+                        <p>إجمالي الصفقات</p>
+                        <h3 id="totalTrades">0</h3>
+                    </div>
+                    <div class="stat-box">
+                        <p>معدل النجاح</p>
+                        <h3 id="winRate">0%</h3>
+                    </div>
+                </div>
+            </div>
+
+            <!-- Orders -->
+            <div class="card">
+                <h2>📈 الأوامر النشطة</h2>
+                <div id="orders" style="max-height: 400px; overflow-y: auto;">
+                    <p style="text-align: center; color: #475569; padding: 30px;">لا توجد أوامر</p>
+                </div>
+                <button onclick="updateOrders()" style="margin-top:10px; width:100%;">🔄 تحديث</button>
+            </div>
+
+            <!-- Positions -->
+            <div class="card">
+                <h2>💼 الصفقات المفتوحة</h2>
+                <div id="positions" style="max-height: 400px; overflow-y: auto;">
+                    <p style="text-align: center; color: #475569; padding: 30px;">لا توجد صفقات</p>
+                </div>
+                <button onclick="updatePositions()" style="margin-top:10px; width:100%;">🔄 تحديث</button>
+            </div>
+
+            <!-- Quick Trade -->
+            <div class="card" id="quickTradeCard" style="display:none;">
+                <h2>⚡ تنفيذ صفقة حقيقية</h2>
+                <div class="alert alert-info" style="margin-bottom:15px; font-size:0.9em;">
+                    <strong>📋 تعليمات:</strong><br>
+                    1. أدخل Entry, Stop Loss, Take Profit<br>
+                    2. اختر BUY أو SELL<br>
+                    3. اضغط "🚀 تنفيذ مع ML" لتقييم Setup<br>
+                    4. أو "⚡ تنفيذ مباشر" لتنفيذ بدون ML
+                </div>
+                <select id="tradeType" style="margin:5px 0;">
+                    <option value="BUY">🟢 BUY (شراء)</option>
+                    <option value="SELL">🔴 SELL (بيع)</option>
+                </select>
+                <input type="number" id="tradeEntry" placeholder="Entry Price (سعر الدخول)" step="0.25">
+                <input type="number" id="tradeSL" placeholder="Stop Loss (وقف الخسارة)" step="0.25">
+                <input type="number" id="tradeTP" placeholder="Take Profit (جني الأرباح)" step="0.25">
+                <input type="number" id="tradeStrength" placeholder="Strength (1-20)" value="10" step="0.5" min="1" max="20">
+                <div style="display:grid; grid-template-columns:1fr 1fr; gap:10px; margin-top:10px;">
+                    <button onclick="executeTrade()" style="width:100%; background:linear-gradient(135deg, #10b981, #059669);">
+                        🤖 تنفيذ مع ML
+                    </button>
+                    <button onclick="executeTradeDirect()" style="width:100%; background:linear-gradient(135deg, #3b82f6, #2563eb);">
+                        ⚡ تنفيذ مباشر
+                    </button>
+                </div>
+                <div id="tradeAlert" style="margin-top:15px;"></div>
+            </div>
+
+            <!-- Executed Trades -->
+            <div class="card full-width" id="executedTradesCard" style="display:none;">
+                <h2>🎯 الصفقات المنفذة (ML)</h2>
+                <div class="executed-log" id="executedTrades">
+                    <p style="text-align:center; color:#475569; padding:20px;">لا توجد صفقات بعد</p>
+                </div>
+                <button onclick="refreshExecutedTrades()" style="margin-top:10px; width:100%;">🔄 تحديث الصفقات</button>
+            </div>
+
+            <!-- Skipped Trades -->
+            <div class="card full-width" id="skippedTradesCard" style="display:none;">
+                <h2>⏭️ الصفقات التي تجاهلها الموديل</h2>
+                <div class="executed-log" id="skippedTrades">
+                    <p style="text-align:center; color:#475569; padding:20px;">لا توجد صفقات متجاهلة بعد</p>
+                </div>
+                <button onclick="refreshSkippedTrades()" style="margin-top:10px; width:100%;">🔄 تحديث المتجاهلة</button>
+            </div>
+
+            <!-- Today's Signals CSV -->
+            <div class="card full-width">
+                <h2>📊 إشارات اليوم (CSV)</h2>
+                <div id="csvInfo" style="padding:15px; background:#0f172a; border-radius:10px; margin-bottom:15px;">
+                    <p style="text-align:center; color:#64748b;">جاري تحميل معلومات الملف...</p>
+                </div>
+                <button onclick="downloadTodayCSV()" style="width:100%; background:linear-gradient(135deg, #3b82f6, #2563eb);">
+                    📥 تحميل ملف CSV لإشارات اليوم
+                </button>
+                <div id="csvAlert" style="margin-top:10px;"></div>
+            </div>
+
+            <!-- API Status -->
+            <div class="card full-width" id="apiStatusCard" style="display:none;">
+                <h2>🔌 حالة ProjectX API</h2>
+                <div class="grid" style="grid-template-columns: repeat(auto-fit, minmax(200px, 1fr));">
+                    <div class="stat-box">
+                        <p>الحساب المختار</p>
+                        <h3 id="selectedAccount">-</h3>
+                    </div>
+                    <div class="stat-box">
+                        <p>العقد المختار</p>
+                        <h3 id="selectedContract">CON.F.US.EP.U25</h3>
+                    </div>
+                    <div class="stat-box">
+                        <p>المراكز المفتوحة</p>
+                        <h3 id="openPositionsCount">0</h3>
+                    </div>
+                    <div class="stat-box">
+                        <p>الأوامر النشطة</p>
+                        <h3 id="openOrdersCount">0</h3>
+                    </div>
+                </div>
+            </div>
+
+            <!-- Live Chart -->
+            <div class="card full-width" id="chartCard" style="display:none !important;">
+                <h2>📊 الرسم البياني الحي 
+                    <span class="live-indicator" id="liveIndicator" style="display:inline-block; width:12px; height:12px; background:#10b981; border-radius:50%; margin-left:10px; animation: pulse 2s infinite;"></span>
+                    <span style="color:#10b981; font-size:0.8em; font-weight:normal;">LIVE</span>
+                </h2>
+                <div style="background:#0f172a; padding:15px; border-radius:10px;">
+                    <div style="display:flex; justify-content:space-between; align-items:center; margin-bottom:10px;">
+                        <div>
+                            <span style="color:#10b981; font-size:1.5em; font-weight:bold;" id="currentPrice">--</span>
+                            <span id="priceChange" style="margin-left:10px; font-size:0.9em;"></span>
+                            <br>
+                            <span style="color:#64748b; font-size:0.9em;" id="contractName">--</span>
+                            <span style="color:#64748b; font-size:0.8em; margin-left:10px;" id="lastUpdate">--</span>
+                        </div>
+                        <div>
+                            <label style="color:#94a3b8; font-size:0.9em; margin-right:10px;">
+                                <input type="checkbox" id="useLiveData" checked onchange="/* updateChart() disabled */"> بيانات حية
+                            </label>
+                            <select id="chartTimeframe" onchange="/* updateChart() disabled */" style="padding:8px; background:#1e293b; border:1px solid #334155; color:#e2e8f0; border-radius:5px;">
+                                <option value="1">1m</option>
+                                <option value="5" selected>5m</option>
+                                <option value="15">15m</option>
+                                <option value="30">30m</option>
+                                <option value="60">1h</option>
+                            </select>
+                            <button onclick="/* updateChart() disabled */" style="padding:8px 15px; margin-left:10px; width:auto;">🔄 تحديث</button>
+                        </div>
+                    </div>
+                    <div id="tradingview_chart" style="height:400px; width:100%;"></div>
+                </div>
+            </div>
+
+            <!-- System Log -->
+            <div class="card full-width">
+                <h2>📋 سجل النظام (REAL API Calls)</h2>
+                <div class="log" id="log">
+                    <p>[SYSTEM] REAL Trading Platform initialized</p>
+                    <p>[INFO] Connect to ProjectX API with real credentials</p>
+                    <p>[INFO] Upload ML model to start trading</p>
+                </div>
+            </div>
+        </div>
+    </div>
+    
+    <!-- TradingView Widget -->
+    <script type="text/javascript" src="https://s3.tradingview.com/tv.js"></script>
+    <!-- Socket.IO client from CDN with fallback -->
+    <script src="https://cdn.socket.io/4.7.5/socket.io.min.js" crossorigin="anonymous"></script>
+    <script>
+        (function ensureSocketIoClient() {
+            if (typeof io === 'function') {
+                console.log('✅ Socket.IO client loaded from primary CDN');
+                window.__socketIoReady = true;
+                return;
+            }
+            
+            const fallbackSources = [
+                'https://cdnjs.cloudflare.com/ajax/libs/socket.io/4.7.5/socket.io.min.js',
+                'https://unpkg.com/socket.io-client@4.7.5/dist/socket.io.min.js'
+            ];
+            let current = 0;
+            
+            function tryLoadFallback() {
+                if (current >= fallbackSources.length) {
+                    console.error('❌ Unable to load Socket.IO client from available CDNs');
+                    return;
+                }
+                
+                const script = document.createElement('script');
+                script.src = fallbackSources[current];
+                script.crossOrigin = 'anonymous';
+                script.onload = () => {
+                    console.log(`[WS] ✅ Socket.IO client loaded from fallback: ${fallbackSources[current]}`);
+                    window.__socketIoReady = true;
+                };
+                script.onerror = () => {
+                    console.warn(`[WS] ⚠️ Failed to load Socket.IO from: ${fallbackSources[current]}`);
+                    current += 1;
+                    tryLoadFallback();
+                };
+                document.head.appendChild(script);
+            }
+            
+            tryLoadFallback();
+        })();
+    </script>
+
+    <!-- TradingView Lightweight Charts (مكتبة مباشرة - ليست Widget) -->
+    <script src="https://unpkg.com/lightweight-charts@4.1.3/dist/lightweight-charts.standalone.production.js"></script>
+    
+    <script>
+        // الانتظار حتى تحميل Lightweight Charts
+        function waitForLightweightCharts(callback, maxAttempts = 50) {
+            let attempts = 0;
+            const checkInterval = setInterval(() => {
+                attempts++;
+                if (typeof LightweightCharts !== 'undefined' && typeof LightweightCharts.createChart === 'function') {
+                    clearInterval(checkInterval);
+                    console.log('✅ TradingView Lightweight Charts loaded successfully');
+                    callback();
+                } else if (attempts >= maxAttempts) {
+                    clearInterval(checkInterval);
+                    console.error('❌ Lightweight Charts failed to load after', maxAttempts, 'attempts');
+                    document.addEventListener('DOMContentLoaded', function() {
+                        const chartContainer = document.getElementById('tradingview_chart');
+                        if (chartContainer) {
+                            chartContainer.innerHTML = '<div style="padding:50px; text-align:center; color:#ef4444;">❌ خطأ في تحميل مكتبة TradingView Widget<br><small>جرب تحديث الصفحة</small></div>';
+                        }
+                    });
+                }
+            }, 100);
+        }
+        
+        // التحقق من تحميل المكتبة
+        waitForLightweightCharts(function() {
+            console.log('Lightweight Charts ready');
+        });
+        
+        let updateInterval = null;
+        let lightweightChart = null;
+        let candlestickSeries = null;
+        let orderBlockPriceLines = [];
+        let fvgPriceLines = [];
+        let tradeMarkers = [];
+        let chartUpdateInterval = null;
+        let selectedContract = 'CON.F.US.EP.U25'; // Default contract
+        let currentOrderBlocks = [];
+        let currentFVGs = [];
+        let currentTrades = [];
+        let socket = null;
+        
+        // دالة لإنشاء بيانات تجريبية
+        function generateDemoData(basePrice = 6580, barsCount = 100) {
+            const data = [];
+            let currentPrice = basePrice;
+            const now = Math.floor(Date.now() / 1000);
+            
+            for (let i = barsCount - 1; i >= 0; i--) {
+                const change = (Math.random() - 0.5) * 10; // تغيير عشوائي ±5 نقاط
+                const open = currentPrice;
+                const close = open + change;
+                const high = Math.max(open, close) + Math.random() * 3;
+                const low = Math.min(open, close) - Math.random() * 3;
+                
+                data.push({
+                    time: now - (i * 300), // كل 5 دقائق
+                    open: parseFloat(open.toFixed(2)),
+                    high: parseFloat(high.toFixed(2)),
+                    low: parseFloat(low.toFixed(2)),
+                    close: parseFloat(close.toFixed(2)),
+                });
+                
+                currentPrice = close;
+            }
+            
+            return data;
+        }
+
+        function addLog(msg) {
+            const log = document.getElementById('log');
+            const time = new Date().toLocaleTimeString('ar-SA');
+            log.innerHTML += `<p>[${time}] ${msg}</p>`;
+            log.scrollTop = log.scrollHeight;
+        }
+
+        let lastPrice = null;
+        
+        function renderStatus(data) {
+            if (!data) {
+                console.warn('[STATUS] renderStatus called with no data');
+                return;
+            }
+            
+            console.log('[STATUS] Updating status bar:', data);
+            
+            // تحديث Connection indicator
+            const connIndicator = document.getElementById('connIndicator');
+            const connText = document.getElementById('connText');
+            
+            if (connIndicator && connText) {
+                const isConnected = data.is_connected === true || data.is_connected === 'true';
+                connIndicator.className = 'indicator ' + (isConnected ? 'connected' : 'disconnected');
+                connText.textContent = isConnected ? 'Connected' : 'Disconnected';
+                console.log('[STATUS] Connection updated:', isConnected ? 'Connected' : 'Disconnected');
+            } else {
+                console.warn('[STATUS] Connection elements not found');
+            }
+            
+            // تحديث ML Model indicator
+            const modelIndicator = document.getElementById('modelIndicator');
+            const modelText = document.getElementById('modelText');
+            
+            if (modelIndicator && modelText) {
+                const isModelLoaded = data.model_loaded === true || data.model_loaded === 'true';
+                modelIndicator.className = 'indicator ' + (isModelLoaded ? 'connected' : 'disconnected');
+                
+                // عرض اسم الموديل إذا كان محملاً، أو "Not Loaded" إذا لم يكن
+                if (isModelLoaded && data.model_name) {
+                    modelText.textContent = data.model_name.length > 20 ? data.model_name.substring(0, 20) + '...' : data.model_name;
+                } else {
+                    modelText.textContent = 'Not Loaded';
+                }
+                console.log('[STATUS] Model updated:', isModelLoaded ? (data.model_name || 'Loaded') : 'Not Loaded');
+            } else {
+                console.warn('[STATUS] Model elements not found');
+            }
+            
+            // تحديث Trading indicator
+            const tradeIndicator = document.getElementById('tradeIndicator');
+            const tradeText = document.getElementById('tradeText');
+            
+            if (tradeIndicator && tradeText) {
+                const isTrading = data.is_trading === true || data.is_trading === 'true';
+                tradeIndicator.className = 'indicator ' + (isTrading ? 'active' : 'disconnected');
+                tradeText.textContent = isTrading ? 'Active' : 'Stopped';
+                console.log('[STATUS] Trading updated:', isTrading ? 'Active' : 'Stopped');
+            } else {
+                console.warn('[STATUS] Trading elements not found');
+            }
+        }
+        
+        function renderAccountInfo(data) {
+            if (!data) return;
+            const balanceElement = document.getElementById('balance');
+            if (balanceElement && typeof data.balance === 'number') {
+                balanceElement.textContent = `$${data.balance.toLocaleString('en-US', {minimumFractionDigits:2, maximumFractionDigits:2})}`;
+            }
+            const dailyPnL = document.getElementById('dailyPnL');
+            if (dailyPnL && typeof data.daily_pnl === 'number') {
+                dailyPnL.textContent = `$${data.daily_pnl.toFixed(2)}`;
+            }
+        }
+        
+        function renderStatsUI(data) {
+            if (!data) return;
+            if (typeof data.total_trades === 'number') {
+                document.getElementById('totalTrades').textContent = data.total_trades;
+            }
+            if (typeof data.win_rate === 'number') {
+                document.getElementById('winRate').textContent = `${data.win_rate.toFixed(1)}%`;
+            }
+        }
+        
+        function renderPositions(positions = []) {
+            const positionsDiv = document.getElementById('positions');
+            if (!positionsDiv) return;
+            if (positions.length === 0) {
+                positionsDiv.innerHTML = '<p style="text-align: center; color: #475569; padding: 30px;">لا توجد صفقات</p>';
+                const countEl = document.getElementById('openPositionsCount');
+                if (countEl) countEl.textContent = '0';
+                return;
+            }
+            let html = '';
+            positions.forEach(pos => {
+                const type = pos.type === 1 ? '🟢 LONG' : '🔴 SHORT';
+                const size = pos.size ?? pos.quantity ?? 0;
+                const avg = pos.averagePrice ?? pos.avgPrice ?? 0;
+                html += `
+                    <div style="background:#1e293b; padding:12px; margin:5px 0; border-radius:8px;">
+                        <strong>${type}</strong> ${pos.contractId || selectedContract}<br>
+                        Size: ${size} | Avg: $${Number(avg).toFixed(2)}<br>
+                        <button onclick="closePosition('${pos.contractId}')" style="margin-top:5px; font-size:0.85em;">❌ إغلاق</button>
+                    </div>
+                `;
+            });
+            positionsDiv.innerHTML = html;
+            const countEl = document.getElementById('openPositionsCount');
+            if (countEl) countEl.textContent = positions.length;
+        }
+        
+        function renderOrders(orders = []) {
+            const ordersDiv = document.getElementById('orders');
+            if (!ordersDiv) return;
+            if (orders.length === 0) {
+                ordersDiv.innerHTML = '<p style="text-align: center; color: #475569; padding: 30px;">لا توجد أوامر</p>';
+                const countEl = document.getElementById('openOrdersCount');
+                if (countEl) countEl.textContent = '0';
+                return;
+            }
+            let html = '';
+            orders.forEach(order => {
+                const side = order.side === 0 ? '🟢 BUY' : '🔴 SELL';
+                const status = order.status === 1 ? 'Open' : order.status === 2 ? 'Filled' : 'Other';
+                const limit = order.limitPrice ? `Limit: $${Number(order.limitPrice).toFixed(2)}` : '';
+                const stop = order.stopPrice ? `Stop: $${Number(order.stopPrice).toFixed(2)}` : '';
+                html += `
+                    <div style="background:#1e293b; padding:12px; margin:5px 0; border-radius:8px;">
+                        <strong>${side}</strong> ${order.contractId || selectedContract}<br>
+                        Size: ${order.size} | Status: ${status}<br>
+                        ${limit} ${stop}<br>
+                        <button onclick="cancelOrder(${order.id || order.orderId || 0})" style="margin-top:5px; font-size:0.85em;">❌ إلغاء</button>
+                    </div>
+                `;
+            });
+            ordersDiv.innerHTML = html;
+            const countEl = document.getElementById('openOrdersCount');
+            if (countEl) countEl.textContent = orders.length;
+        }
+        
+        let obSeries = null;  // Order Blocks series
+        // Note: tradeMarkers already declared above at line 563
+        
+        function applyChartData(data, fallbackContract, fallbackSource) {
+            if (!data) return;
+            const contract = data.contract || fallbackContract || selectedContract || 'CON.F.US.EP.U25';
+            const dataSource = data.data_source || fallbackSource || 'SIM';
+            // Order Blocks والصفقات من API - سيتم استخدامها لاحقاً
+            const orderBlocksData = data.order_blocks || [];
+            const executedTradesData = data.executed_trades || [];
+            const fvgsData = data.fvgs || [];
+            
+            console.log(`[CHART] 🔍 applyChartData - Full data keys:`, Object.keys(data));
+            console.log(`[CHART] 🔍 applyChartData - order_blocks:`, data.order_blocks, `(type: ${typeof data.order_blocks})`);
+            console.log(`[CHART] 🔍 applyChartData - orderBlocksData:`, orderBlocksData, `(length: ${orderBlocksData.length})`);
+            console.log(`[CHART] 🔍 applyChartData - fvgs:`, data.fvgs, `(type: ${typeof data.fvgs})`);
+            console.log(`[CHART] 🔍 applyChartData - fvgsData:`, fvgsData, `(length: ${fvgsData.length})`);
+            console.log(`[CHART] 🔍 applyChartData - executed_trades:`, data.executed_trades, `(type: ${typeof data.executed_trades})`);
+            
+            let candlestickData = data.candles;
+            if (!candlestickData && data.labels && data.data) {
+                candlestickData = [];
+                for (let i = 0; i < data.labels.length; i++) {
+                    try {
+                        const timestamp = new Date(data.labels[i]).getTime() / 1000;
+                        if (isNaN(timestamp)) continue;
+                        candlestickData.push({
+                            time: timestamp,
+                            open: parseFloat(data.data.open[i]),
+                            high: parseFloat(data.data.high[i]),
+                            low: parseFloat(data.data.low[i]),
+                            close: parseFloat(data.data.close[i]),
+                        });
+                    } catch (error) {
+                        console.warn('[CHART] Invalid data point', error);
+                    }
+                }
+            }
+            if (Array.isArray(candlestickData)) {
+                candlestickData = candlestickData.filter(c =>
+                    c &&
+                    Number.isFinite(c.time) &&
+                    Number.isFinite(c.open) &&
+                    Number.isFinite(c.high) &&
+                    Number.isFinite(c.low) &&
+                    Number.isFinite(c.close)
+                );
+            }
+            if (!candlestickData || candlestickData.length === 0) {
+                console.warn('[CHART] No valid candlestick data');
+                return;
+            }
+            selectedContract = contract;
+            
+            console.log(`[CHART] ✅ Applying chart data: ${candlestickData.length} candles, ${orderBlocksData.length} OBs, ${fvgsData.length} FVGs`);
+            
+            // رسم Order Blocks و FVGs والصفقات من البيانات
+            displayTradingViewChart(candlestickData, contract, dataSource, orderBlocksData, executedTradesData, fvgsData);
+            const latestCandle = candlestickData[candlestickData.length - 1];
+            const currentPrice = (typeof data.current_price === 'number') ? data.current_price : latestCandle.close;
+            const priceElement = document.getElementById('currentPrice');
+            if (priceElement) {
+                priceElement.style.transition = 'color 0.3s';
+                priceElement.textContent = `$${currentPrice.toFixed(2)}`;
+                priceElement.style.color = '#f59e0b';
+                setTimeout(() => { priceElement.style.color = '#10b981'; }, 300);
+            }
+            const priceChange = document.getElementById('priceChange');
+            if (priceChange) {
+                let priceChangeHtml = '';
+                if (lastPrice !== null) {
+                    const change = currentPrice - lastPrice;
+                    const changePercent = lastPrice === 0 ? 0 : ((change / lastPrice) * 100).toFixed(2);
+                    const arrow = change > 0 ? '▲' : change < 0 ? '▼' : '─';
+                    const color = change > 0 ? '#10b981' : change < 0 ? '#ef4444' : '#64748b';
+                    priceChangeHtml = `<span style="color:${color};">${arrow} ${Math.abs(change).toFixed(2)} (${changePercent}%)</span>`;
+                }
+                priceChange.innerHTML = priceChangeHtml;
+            }
+            lastPrice = currentPrice;
+            const contractElement = document.getElementById('contractName');
+            if (contractElement) contractElement.textContent = contract;
+            const lastUpdateElement = document.getElementById('lastUpdate');
+            if (lastUpdateElement) {
+                const now = new Date();
+                lastUpdateElement.textContent = `تحديث: ${now.toLocaleTimeString('ar-SA')} (${dataSource})`;
+            }
+            const liveIndicator = document.getElementById('liveIndicator');
+            if (liveIndicator) {
+                liveIndicator.style.background = dataSource === 'LIVE' ? '#10b981' : '#f59e0b';
+            }
+        }
+        
+        /* Original applyChartData code - disabled (now replaced above)
+        function applyChartData_ORIGINAL(data, fallbackContract, fallbackSource) {
+            if (!data) return;
+            const contract = data.contract || fallbackContract || selectedContract || 'CON.F.US.EP.U25';
+            const dataSource = data.data_source || fallbackSource || 'SIM';
+            // Order Blocks والصفقات من API - سيتم استخدامها لاحقاً
+            const orderBlocksData = data.order_blocks || [];
+            const executedTradesData = data.executed_trades || [];
+            const fvgsData = data.fvgs || [];
+            
+            // Logging للتحقق
+            console.log(`[CHART] 🔍 applyChartData - Full data keys:`, Object.keys(data));
+            console.log(`[CHART] 🔍 applyChartData - order_blocks:`, data.order_blocks, `(type: ${typeof data.order_blocks})`);
+            console.log(`[CHART] 🔍 applyChartData - orderBlocksData:`, orderBlocksData, `(length: ${orderBlocksData.length})`);
+            console.log(`[CHART] 🔍 applyChartData - fvgs:`, data.fvgs, `(type: ${typeof data.fvgs})`);
+            console.log(`[CHART] 🔍 applyChartData - fvgsData:`, fvgsData, `(length: ${fvgsData.length})`);
+            console.log(`[CHART] 🔍 applyChartData - executed_trades:`, data.executed_trades, `(type: ${typeof data.executed_trades})`);
+            
+            // Log full data object للتحقق
+            console.log(`[CHART] 🔍 Full data object:`, JSON.stringify(data).substring(0, 500));
+            
+            let candlestickData = data.candles;
+            if (!candlestickData && data.labels && data.data) {
+                candlestickData = [];
+                for (let i = 0; i < data.labels.length; i++) {
+                    try {
+                        const timestamp = new Date(data.labels[i]).getTime() / 1000;
+                        if (isNaN(timestamp)) continue;
+                        candlestickData.push({
+                            time: timestamp,
+                            open: parseFloat(data.data.open[i]),
+                            high: parseFloat(data.data.high[i]),
+                            low: parseFloat(data.data.low[i]),
+                            close: parseFloat(data.data.close[i]),
+                        });
+                    } catch (error) {
+                        console.warn('[CHART] Invalid data point', error);
+                    }
+                }
+            }
+            if (Array.isArray(candlestickData)) {
+                candlestickData = candlestickData.filter(c =>
+                    c &&
+                    Number.isFinite(c.time) &&
+                    Number.isFinite(c.open) &&
+                    Number.isFinite(c.high) &&
+                    Number.isFinite(c.low) &&
+                    Number.isFinite(c.close)
+                );
+            }
+            if (!candlestickData || candlestickData.length === 0) return;
+            selectedContract = contract;
+            
+            // رسم Order Blocks و FVGs والصفقات من البيانات
+            displayTradingViewChart(candlestickData, contract, dataSource, orderBlocksData, executedTradesData, fvgsData);
+            const latestCandle = candlestickData[candlestickData.length - 1];
+            const currentPrice = (typeof data.current_price === 'number') ? data.current_price : latestCandle.close;
+            const priceElement = document.getElementById('currentPrice');
+            if (priceElement) {
+                priceElement.style.transition = 'color 0.3s';
+                priceElement.textContent = `$${currentPrice.toFixed(2)}`;
+                priceElement.style.color = '#f59e0b';
+                setTimeout(() => { priceElement.style.color = '#10b981'; }, 300);
+            }
+            const priceChange = document.getElementById('priceChange');
+            if (priceChange) {
+                let priceChangeHtml = '';
+                if (lastPrice !== null) {
+                    const change = currentPrice - lastPrice;
+                    const changePercent = lastPrice === 0 ? 0 : ((change / lastPrice) * 100).toFixed(2);
+                    const arrow = change > 0 ? '▲' : change < 0 ? '▼' : '─';
+                    const color = change > 0 ? '#10b981' : change < 0 ? '#ef4444' : '#64748b';
+                    priceChangeHtml = `<span style="color:${color};">${arrow} ${Math.abs(change).toFixed(2)} (${changePercent}%)</span>`;
+                }
+                priceChange.innerHTML = priceChangeHtml;
+            }
+            lastPrice = currentPrice;
+            const contractElement = document.getElementById('contractName');
+            if (contractElement) contractElement.textContent = contract;
+            const lastUpdateElement = document.getElementById('lastUpdate');
+            if (lastUpdateElement) {
+                const now = new Date();
+                lastUpdateElement.textContent = `تحديث: ${now.toLocaleTimeString('ar-SA')} (${dataSource})`;
+            }
+            const liveIndicator = document.getElementById('liveIndicator');
+            if (liveIndicator) {
+                liveIndicator.style.background = dataSource === 'LIVE' ? '#10b981' : '#f59e0b';
+            }
+        }
+        */
+        
+        function handleChartPayload(payload) {
+            if (!payload) return;
+            console.log(`[CHART] 📥 Socket.IO payload received:`, payload);
+            console.log(`[CHART] 📥 Payload keys:`, Object.keys(payload));
+            console.log(`[CHART] 📥 order_blocks in payload:`, payload.order_blocks);
+            console.log(`[CHART] 📥 fvgs in payload:`, payload.fvgs);
+            console.log(`[CHART] 📥 executed_trades in payload:`, payload.executed_trades);
+            
+            // Store the payload globally so separate events can merge with it
+            window.lastChartPayload = payload;
+            
+            applyChartData(payload, payload.contract, payload.data_source);
+        }
+
+        function renderExecutedTrades(trades = []) {
+            const card = document.getElementById('executedTradesCard');
+            const container = document.getElementById('executedTrades');
+            if (!card || !container) return;
+            card.style.display = 'block';
+            if (!Array.isArray(trades) || trades.length === 0) {
+                container.innerHTML = '<p style="text-align:center; color:#475569; padding:20px;">لا توجد صفقات منفذة بعد</p>';
+                return;
+            }
+            const rows = trades.slice(0, 25).map(trade => {
+                const prob = typeof trade.probability === 'number'
+                    ? `${(trade.probability * 100).toFixed(1)}%`
+                    : 'N/A';
+                const time = trade.timestamp ? new Date(trade.timestamp).toLocaleTimeString('ar-SA') : '--';
+                const typeColor = (trade.type || '').toUpperCase() === 'BUY' ? '#10b981' : '#f87171';
+                return `
+                    <div class="executed-entry">
+                        <div>
+                            <strong style="color:${typeColor};">${trade.type || '--'}</strong>
+                            @ ${trade.entry ?? '--'} | SL: ${trade.sl ?? '--'} | TP: ${trade.tp ?? '--'}
+                        </div>
+                        <div class="executed-meta">
+                            ⏱️ ${time} | 🎯 ${trade.contract || '--'} | 📈 احتمالية: ${prob}
+                        </div>
+                        <div class="executed-meta">
+                            🧠 السبب: ${trade.reason || '---'} | المصدر: ${trade.source || 'UNKNOWN'} | Order: ${trade.order_id || '---'}
+                        </div>
+                    </div>
+                `;
+            }).join('');
+            container.innerHTML = rows;
+        }
+
+        async function refreshExecutedTrades() {
+            try {
+                const res = await fetch('/api/executed_trades');
+                const data = await res.json();
+                if (data.success) {
+                    renderExecutedTrades(data.trades || []);
+                }
+            } catch (error) {
+                console.error('[EXECUTED] Error:', error);
+                addLog(`[ERROR] Executed trades: ${error.message}`);
+            }
+        }
+
+        function renderSkippedTrades(trades = []) {
+            const card = document.getElementById('skippedTradesCard');
+            const container = document.getElementById('skippedTrades');
+            if (!card || !container) return;
+            card.style.display = 'block';
+            if (!Array.isArray(trades) || trades.length === 0) {
+                container.innerHTML = '<p style="text-align:center; color:#475569; padding:20px;">لا توجد صفقات متجاهلة</p>';
+                return;
+            }
+            const rows = trades.slice(0, 25).map(trade => {
+                const prob = typeof trade.probability === 'number'
+                    ? `${(trade.probability * 100).toFixed(1)}%`
+                    : 'N/A';
+                const time = trade.timestamp ? new Date(trade.timestamp).toLocaleTimeString('ar-SA') : '--';
+                const typeColor = (trade.type || '').toUpperCase() === 'BUY' ? '#10b981' : '#f87171';
+                return `
+                    <div class="executed-entry">
+                        <div>
+                            <strong style="color:${typeColor};">${trade.type || '--'}</strong>
+                            @ ${trade.entry ?? '--'} | SL: ${trade.sl ?? '--'} | TP: ${trade.tp ?? '--'}
+                        </div>
+                        <div class="executed-meta">
+                            ⏱️ ${time} | 🎯 ${trade.contract || '--'} | 📉 احتمالية: ${prob}
+                        </div>
+                        <div class="executed-meta">
+                            🧠 السبب: ${trade.reason || '---'} | المصدر: ${trade.source || 'UNKNOWN'}
+                        </div>
+                    </div>
+                `;
+            }).join('');
+            container.innerHTML = rows;
+        }
+
+        async function refreshSkippedTrades() {
+            try {
+                const res = await fetch('/api/skipped_trades');
+                const data = await res.json();
+                if (data.success) {
+                    renderSkippedTrades(data.trades || []);
+                }
+            } catch (error) {
+                console.error('[SKIPPED] Error:', error);
+                addLog(`[ERROR] Skipped trades: ${error.message}`);
+            }
+        }
+
+        async function updateCSVInfo() {
+            try {
+                const res = await fetch('/api/today_signals_csv_info');
+                
+                // التحقق من نوع الاستجابة
+                if (!res.ok) {
+                    throw new Error(`HTTP error! status: ${res.status}`);
+                }
+                
+                // التحقق من Content-Type
+                const contentType = res.headers.get('content-type');
+                if (!contentType || !contentType.includes('application/json')) {
+                    const text = await res.text();
+                    console.error('[CSV] Expected JSON but got:', contentType, text.substring(0, 200));
+                    throw new Error(`Expected JSON but got ${contentType}`);
+                }
+                
+                const data = await res.json();
+                const container = document.getElementById('csvInfo');
+                const alertDiv = document.getElementById('csvAlert');
+                
+                if (!container) return;
+                
+                if (!data.success || !data.exists) {
+                    container.innerHTML = `
+                        <div style="text-align:center; color:#64748b; padding:20px;">
+                            <p>📁 <strong>لا يوجد ملف CSV لليوم</strong></p>
+                            <p style="font-size:0.9em; margin-top:10px;">سيتم إنشاء الملف تلقائياً عند تنفيذ أول إشارة</p>
+                            <p style="font-size:0.8em; color:#475569; margin-top:5px;">الملف الرئيسي: <code style="font-size:0.85em;">${data.main_file_path || data.file_path || 'signals.csv'}</code></p>
+                            ${data.message ? `<p style="font-size:0.8em; color:#ef4444; margin-top:5px;">⚠️ ${data.message}</p>` : ''}
+                        </div>
+                    `;
+                    if (alertDiv) alertDiv.innerHTML = '';
+                    return;
+                }
+                
+                container.innerHTML = `
+                    <div style="display:grid; grid-template-columns: repeat(auto-fit, minmax(150px, 1fr)); gap:15px;">
+                        <div style="background:#1e293b; padding:15px; border-radius:8px; border:1px solid #334155;">
+                            <p style="color:#94a3b8; font-size:0.9em; margin-bottom:5px;">📅 التاريخ</p>
+                            <h3 style="color:#10b981; margin:0;">${new Date(data.date).toLocaleDateString('ar-SA')}</h3>
+                        </div>
+                        <div style="background:#1e293b; padding:15px; border-radius:8px; border:1px solid #334155;">
+                            <p style="color:#94a3b8; font-size:0.9em; margin-bottom:5px;">📊 إجمالي الإشارات</p>
+                            <h3 style="color:#3b82f6; margin:0;">${data.total_signals}</h3>
+                        </div>
+                        <div style="background:#1e293b; padding:15px; border-radius:8px; border:1px solid #334155;">
+                            <p style="color:#94a3b8; font-size:0.9em; margin-bottom:5px;">✅ منفذة</p>
+                            <h3 style="color:#10b981; margin:0;">${data.executed}</h3>
+                        </div>
+                        <div style="background:#1e293b; padding:15px; border-radius:8px; border:1px solid #334155;">
+                            <p style="color:#94a3b8; font-size:0.9em; margin-bottom:5px;">⏭️ متجاهلة</p>
+                            <h3 style="color:#f59e0b; margin:0;">${data.skipped}</h3>
+                        </div>
+                        <div style="background:#1e293b; padding:15px; border-radius:8px; border:1px solid #334155;">
+                            <p style="color:#94a3b8; font-size:0.9em; margin-bottom:5px;">💾 حجم الملف</p>
+                            <h3 style="color:#8b5cf6; margin:0;">${data.file_size_kb} KB</h3>
+                        </div>
+                    </div>
+                    <div style="margin-top:15px; padding:10px; background:#1e293b; border-radius:8px; border:1px solid #334155;">
+                        <p style="color:#64748b; font-size:0.85em; margin:0;">
+                            📁 <strong>الملف:</strong> <code style="color:#94a3b8; font-size:0.9em;">${data.file_name}</code>
+                        </p>
+                        <p style="color:#64748b; font-size:0.85em; margin-top:5px; margin-bottom:0;">
+                            📂 <strong>المسار:</strong> <code style="color:#94a3b8; font-size:0.8em; word-break:break-all;">${data.file_path}</code>
+                        </p>
+                    </div>
+                `;
+                if (alertDiv) alertDiv.innerHTML = '';
+            } catch (error) {
+                console.error('[CSV] Error:', error);
+                console.error('[CSV] Error stack:', error.stack);
+                const container = document.getElementById('csvInfo');
+                if (container) {
+                    let errorMsg = error.message || 'خطأ غير معروف';
+                    if (error.message && error.message.includes('Unexpected token')) {
+                        errorMsg = 'خطأ في استجابة الخادم (تأكد من أن السيرفر يعمل)';
+                    }
+                    container.innerHTML = `
+                        <div style="color:#ef4444; text-align:center; padding:20px; background:#1e293b; border-radius:8px; border:1px solid #ef4444;">
+                            <p>❌ <strong>خطأ في تحميل معلومات CSV</strong></p>
+                            <p style="font-size:0.9em; margin-top:10px;">${errorMsg}</p>
+                            <p style="font-size:0.8em; color:#94a3b8; margin-top:10px;">تأكد من أن السيرفر يعمل وأن route /api/today_signals_csv_info موجود</p>
+                            <button onclick="updateCSVInfo()" style="margin-top:15px; padding:8px 15px; background:#ef4444; color:white; border:none; border-radius:5px; cursor:pointer;">🔄 إعادة المحاولة</button>
+                        </div>
+                    `;
+                }
+            }
+        }
+
+        function downloadTodayCSV() {
+            try {
+                const alertDiv = document.getElementById('csvAlert');
+                if (alertDiv) {
+                    alertDiv.innerHTML = '<div class="alert alert-info" style="padding:10px; margin:10px 0;">⏳ جاري تحميل الملف...</div>';
+                }
+                
+                // إنشاء رابط تحميل
+                const link = document.createElement('a');
+                link.href = '/api/today_signals_csv';
+                link.download = `signals_${new Date().toISOString().split('T')[0].replace(/-/g, '')}.csv`;
+                document.body.appendChild(link);
+                link.click();
+                document.body.removeChild(link);
+                
+                setTimeout(() => {
+                    if (alertDiv) {
+                        alertDiv.innerHTML = '<div class="alert alert-success" style="padding:10px; margin:10px 0;">✅ تم بدء التحميل بنجاح</div>';
+                    }
+                    // تحديث المعلومات بعد التحميل
+                    updateCSVInfo();
+                }, 500);
+            } catch (error) {
+                console.error('[CSV] Download error:', error);
+                const alertDiv = document.getElementById('csvAlert');
+                if (alertDiv) {
+                    alertDiv.innerHTML = `<div class="alert alert-error" style="padding:10px; margin:10px 0; background:#ef4444; color:white;">❌ خطأ في التحميل: ${error.message}</div>`;
+                }
+            }
+        }
+
+        function renderSettingsUI(data) {
+            if (!data) return;
+            const minProbInput = document.getElementById('minProbInput');
+            const maxTradesInput = document.getElementById('maxTradesInput');
+            const maxLossInput = document.getElementById('maxLossInput');
+            const thresholdMultInput = document.getElementById('thresholdMultInput');
+            const minCandlesInput = document.getElementById('minCandlesInput');
+            const minMomentumInput = document.getElementById('minMomentumInput');
+            const debugSetupInput = document.getElementById('debugSetupInput');
+            
+            if (minProbInput && typeof data.min_ml_probability === 'number') {
+                minProbInput.value = Math.round(data.min_ml_probability * 10) / 10; // عرض بدقة واحدة
+            }
+            if (maxTradesInput && typeof data.max_trades_per_day === 'number') {
+                maxTradesInput.value = data.max_trades_per_day;
+            }
+            if (maxLossInput && typeof data.max_daily_loss === 'number') {
+                maxLossInput.value = Math.round(data.max_daily_loss); // عرض بدون كسور
+            }
+            if (thresholdMultInput && typeof data.setup_threshold_multiplier === 'number') {
+                thresholdMultInput.value = Math.round(data.setup_threshold_multiplier * 100) / 100; // عرض بدقة اثنتين
+            }
+            if (minCandlesInput && typeof data.min_candles_for_setup === 'number') {
+                minCandlesInput.value = data.min_candles_for_setup;
+            }
+            if (minMomentumInput && typeof data.min_momentum_ticks === 'number') {
+                minMomentumInput.value = data.min_momentum_ticks;
+            }
+            if (debugSetupInput && typeof data.debug_setup_detection === 'boolean') {
+                debugSetupInput.checked = data.debug_setup_detection;
+            }
+        }
+
+        async function loadSettings() {
+            try {
+                const res = await fetch('/api/settings');
+                const data = await res.json();
+                if (data.success) {
+                    renderSettingsUI(data.settings);
+                }
+            } catch (error) {
+                console.error('[SETTINGS] Error:', error);
+            }
+        }
+
+        window.saveSettings = async function saveSettings() {
+            const minProb = parseFloat(document.getElementById('minProbInput').value);
+            const maxTrades = parseInt(document.getElementById('maxTradesInput').value, 10);
+            const maxLoss = parseFloat(document.getElementById('maxLossInput').value);
+            const thresholdMult = parseFloat(document.getElementById('thresholdMultInput').value);
+            const minCandles = parseInt(document.getElementById('minCandlesInput').value, 10);
+            const minMomentum = parseInt(document.getElementById('minMomentumInput').value, 10);
+            const debugSetup = document.getElementById('debugSetupInput').checked;
+            const alertDiv = document.getElementById('settingsAlert');
+            alertDiv.innerHTML = '<div class="alert alert-info">⏳ جاري حفظ الإعدادات...</div>';
+            try {
+                const res = await fetch('/api/settings', {
+                    method: 'POST',
+                    headers: {'Content-Type': 'application/json'},
+                    body: JSON.stringify({
+                        min_probability_percent: minProb,
+                        max_trades_per_day: maxTrades,
+                        max_daily_loss: maxLoss,
+                        threshold_multiplier: thresholdMult,
+                        min_candles_for_setup: minCandles,
+                        min_momentum_ticks: minMomentum,
+                        debug_setup_detection: debugSetup
+                    })
+                });
+                const data = await res.json();
+                if (data.success) {
+                    renderSettingsUI(data.settings);
+                    
+                    // التحقق من التغييرات في القيم (مقارنة القيم المُدخلة بالقيم المُرجعة)
+                    const returnedProb = Math.round(data.settings.min_ml_probability * 10) / 10;
+                    const returnedTrades = data.settings.max_trades_per_day;
+                    const returnedLoss = Math.round(data.settings.max_daily_loss);
+                    const returnedThreshold = Math.round(data.settings.setup_threshold_multiplier * 100) / 100;
+                    const returnedCandles = data.settings.min_candles_for_setup;
+                    const returnedMomentum = data.settings.min_momentum_ticks;
+                    
+                    let adjustedValues = [];
+                    if (Math.abs(minProb - returnedProb) > 0.1) adjustedValues.push(`الاحتمالية: ${minProb}% → ${returnedProb}%`);
+                    if (maxTrades !== returnedTrades) adjustedValues.push(`الصفقات: ${maxTrades} → ${returnedTrades}`);
+                    if (Math.abs(maxLoss - returnedLoss) > 1) adjustedValues.push(`الخسارة: $${maxLoss} → $${returnedLoss}`);
+                    if (Math.abs(thresholdMult - returnedThreshold) > 0.05) adjustedValues.push(`العتبة: ${thresholdMult}x → ${returnedThreshold}x`);
+                    if (minCandles !== returnedCandles) adjustedValues.push(`الشموع: ${minCandles} → ${returnedCandles}`);
+                    if (minMomentum !== returnedMomentum) adjustedValues.push(`Momentum: ${minMomentum} → ${returnedMomentum}`);
+                    
+                    if (adjustedValues.length > 0) {
+                        alertDiv.innerHTML = `<div class="alert alert-warning">⚠️ تم حفظ الإعدادات مع تعديل بعض القيم:<br>${adjustedValues.join('<br>')}</div>`;
+                    } else {
+                        alertDiv.innerHTML = '<div class="alert alert-success">✅ تم حفظ الإعدادات بنجاح</div>';
+                    }
+                } else {
+                    alertDiv.innerHTML = `<div class="alert alert-error">❌ ${data.message}</div>`;
+                }
+            } catch (error) {
+                alertDiv.innerHTML = `<div class="alert alert-error">❌ ${error.message}</div>`;
+            }
+        }
+        
+        function initRealtimeChannel(attempt = 0) {
+            if (socket) return;
+            
+            if (typeof io !== 'function') {
+                if (attempt > 20) {
+                    console.error('[WS] Socket.IO client is not available after multiple retries');
+                    addLog('[WS] ❌ Socket.IO client not available. تأكد من السماح بالاتصال بالشبكة.');
+                    return;
+                }
+                setTimeout(() => initRealtimeChannel(attempt + 1), 500);
+                return;
+            }
+            
+            socket = io();
+            socket.on('connect', () => {
+                addLog('[WS] ✅ Connected to realtime channel');
+                // تحديث الحالة فور الاتصال
+                updateStatus();
+            });
+            socket.on('disconnect', () => {
+                addLog('[WS] ⚠️ Disconnected from realtime channel');
+                // تحديث الحالة عند الانقطاع
+                renderStatus({
+                    is_connected: false,
+                    model_loaded: false,
+                    is_trading: false
+                });
+            });
+            socket.on('status', (data) => {
+                console.log('[WS] Status received:', data);
+                renderStatus(data);
+            });
+            socket.on('account', renderAccountInfo);
+            socket.on('stats', renderStatsUI);
+            socket.on('positions', data => renderPositions(data.positions || []));
+            socket.on('orders', data => renderOrders(data.orders || []));
+            socket.on('executed_trades', trades => renderExecutedTrades(trades));
+            socket.on('skipped_trades', trades => renderSkippedTrades(trades));
+            socket.on('settings', data => renderSettingsUI(data));
+            socket.on('chart', handleChartPayload);
+            
+            // Handle separate events for order_blocks, fvgs, and executed_trades
+            // Chart disabled - ignore chart events
+            /*
+            socket.on('chart_order_blocks', (data) => {
+                console.log(`[CHART] 📥 chart_order_blocks received:`, data);
+                if (data && data.order_blocks !== undefined) {
+                    // Merge with existing chart data
+                    const currentPayload = window.lastChartPayload || {};
+                    currentPayload.order_blocks = data.order_blocks;
+                    window.lastChartPayload = currentPayload;
+                    if (currentPayload.contract && currentPayload.data_source) {
+                        applyChartData(currentPayload, currentPayload.contract, currentPayload.data_source);
+                    }
+                }
+            });
+            
+            socket.on('chart_fvgs', (data) => {
+                console.log(`[CHART] 📥 chart_fvgs received:`, data);
+                if (data && data.fvgs !== undefined) {
+                    // Merge with existing chart data
+                    const currentPayload = window.lastChartPayload || {};
+                    currentPayload.fvgs = data.fvgs;
+                    window.lastChartPayload = currentPayload;
+                    if (currentPayload.contract && currentPayload.data_source) {
+                        applyChartData(currentPayload, currentPayload.contract, currentPayload.data_source);
+                    }
+                }
+            });
+            
+            socket.on('chart_executed_trades', (data) => {
+                console.log(`[CHART] 📥 chart_executed_trades received:`, data);
+                if (data && data.executed_trades !== undefined) {
+                    // Merge with existing chart data
+                    const currentPayload = window.lastChartPayload || {};
+                    currentPayload.executed_trades = data.executed_trades;
+                    window.lastChartPayload = currentPayload;
+                    if (currentPayload.contract && currentPayload.data_source) {
+                        applyChartData(currentPayload, currentPayload.contract, currentPayload.data_source);
+                    }
+                }
+            });
+            */
+            socket.on('log', entry => {
+                if (entry && entry.message) {
+                    addLog(`[${entry.level}] ${entry.message}`);
+                }
+            });
+            socket.on('logs', entries => {
+                if (Array.isArray(entries)) {
+                    entries.forEach(entry => {
+                        if (entry && entry.message) {
+                            addLog(`[${entry.level}] ${entry.message}`);
+                        }
+                    });
+                }
+            });
+        }
+        
+        // دالة لعرض TradingView Chart
+        function drawOrderBlocks(orderBlocks) {
+            if (!tradingViewChart || !candlestickSeries) {
+                console.log(`[CHART] ⚠️ Chart or series not ready: chart=${!!tradingViewChart}, series=${!!candlestickSeries}`);
+                return;
+            }
+            
+            // إزالة Order Blocks السابقة
+            obPriceLines.forEach(line => {
+                try {
+                    candlestickSeries.removePriceLine(line);
+                } catch(e) {
+                    // Ignore if already removed
+                }
+            });
+            obPriceLines = [];
+            
+            if (!orderBlocks || orderBlocks.length === 0) {
+                console.log(`[CHART] ⚠️ No Order Blocks to draw: ${orderBlocks?.length || 0}`);
+                return;
+            }
+            
+            console.log(`[CHART] 🎨 Drawing ${orderBlocks.length} Order Blocks...`);
+            
+            // استخدام Price Lines ملونة وواضحة لرسم Order Blocks
+            let drawnCount = 0;
+            orderBlocks.forEach((ob, index) => {
+                try {
+                    if (!ob || typeof ob.high !== 'number' || typeof ob.low !== 'number') {
+                        console.warn(`[CHART] Invalid OB ${index + 1}:`, ob);
+                        return;
+                    }
+                    
+                    const isBullish = ob.type === 'Bullish';
+                    const lineColor = isBullish ? '#10b981' : '#ef4444';  // أخضر للـ Bullish، أحمر للـ Bearish
+                    const lineWidth = 3;  // خط أكثر سماكة
+                    
+                    // رسم خط علوي (High)
+                    const highLine = candlestickSeries.createPriceLine({
+                        price: ob.high,
+                        color: lineColor,
+                        lineWidth: lineWidth,
+                        lineStyle: 0,  // 0=solid
+                        axisLabelVisible: true,
+                        title: `${isBullish ? '🟢' : '🔴'} OB-H`,
+                    });
+                    obPriceLines.push(highLine);
+                    
+                    // رسم خط سفلي (Low)
+                    const lowLine = candlestickSeries.createPriceLine({
+                        price: ob.low,
+                        color: lineColor,
+                        lineWidth: lineWidth,
+                        lineStyle: 0,
+                        axisLabelVisible: true,
+                        title: `${isBullish ? '🟢' : '🔴'} OB-L`,
+                    });
+                    obPriceLines.push(lowLine);
+                    
+                    drawnCount++;
+                    console.log(`[CHART] ✅ OB ${index + 1}: ${ob.type} @ $${ob.low.toFixed(2)}-$${ob.high.toFixed(2)}`);
+                } catch(e) {
+                    console.error(`[CHART] Error drawing OB ${index + 1}:`, e, ob);
+                }
+            });
+            
+            console.log(`[CHART] ✅ Added ${drawnCount}/${orderBlocks.length} Order Blocks (Price Lines)`);
+        }
+        
+        function drawTradeMarkers(trades) {
+            if (!tradingViewChart || !candlestickSeries || !trades || trades.length === 0) return;
+            
+            // إعادة تعيين الماركرز
+            tradeMarkers = [];
+            
+            trades.forEach(trade => {
+                if (!trade.entry || !trade.timestamp) return;
+                
+                try {
+                    const entryTime = Math.floor(new Date(trade.timestamp).getTime() / 1000);
+                    const isBuy = (trade.type || '').toUpperCase() === 'BUY';
+                    
+                    // Entry marker
+                    tradeMarkers.push({
+                        time: entryTime,
+                        position: isBuy ? 'belowBar' : 'aboveBar',
+                        color: isBuy ? '#10b981' : '#ef4444',
+                        shape: isBuy ? 'arrowUp' : 'arrowDown',
+                        text: `${trade.type} @ ${trade.entry}`,
+                        size: 2,
+                    });
+                    
+                    // SL marker
+                    if (trade.sl) {
+                        tradeMarkers.push({
+                            time: entryTime,
+                            position: isBuy ? 'belowBar' : 'aboveBar',
+                            color: '#ef4444',
+                            shape: 'square',
+                            text: `SL: ${trade.sl}`,
+                            size: 1,
+                        });
+                    }
+                    
+                    // TP marker
+                    if (trade.tp) {
+                        tradeMarkers.push({
+                            time: entryTime,
+                            position: isBuy ? 'aboveBar' : 'belowBar',
+                            color: '#10b981',
+                            shape: 'circle',
+                            text: `TP: ${trade.tp}`,
+                            size: 1,
+                        });
+                    }
+                } catch(e) {
+                    console.warn('[CHART] Error adding trade marker:', e);
+                }
+            });
+            
+            if (tradeMarkers.length > 0) {
+                candlestickSeries.setMarkers(tradeMarkers);
+                console.log(`[CHART] ✅ Added ${tradeMarkers.length} trade markers`);
+            }
+        }
+        
+        function displayTradingViewChart(candlestickData, contractName, dataSource, orderBlocks = [], executedTrades = [], fvgs = []) {
+            const chartContainer = document.getElementById('tradingview_chart');
+            
+            if (!chartContainer) {
+                console.error('[CHART] Container not found');
+                return;
+            }
+            
+            // Check if Lightweight Charts is loaded
+            if (typeof LightweightCharts === 'undefined' || typeof LightweightCharts.createChart !== 'function') {
+                chartContainer.innerHTML = '<div style="padding:50px; text-align:center; color:#ef4444;">❌ مكتبة Lightweight Charts غير محملة<br><small>جرب تحديث الصفحة</small></div>';
+                console.error('[CHART] LightweightCharts is undefined');
+                return;
+            }
+            
+            // Check if we have data
+            if (!candlestickData || candlestickData.length === 0) {
+                chartContainer.innerHTML = '<div style="padding:50px; text-align:center; color:#94a3b8;">⚠️ لا توجد بيانات للعرض</div>';
+                return;
+            }
+            
+            // Clear container
+            chartContainer.innerHTML = '';
+            
+            // Destroy existing chart if any
+            if (lightweightChart) {
+                try {
+                    lightweightChart.remove();
+                } catch(e) {
+                    console.warn('[CHART] Error removing old chart:', e);
+                }
+                lightweightChart = null;
+                candlestickSeries = null;
+                orderBlockPriceLines = [];
+                fvgPriceLines = [];
+                tradeMarkers = [];
+            }
+            
+            try {
+                console.log('[CHART] Creating Lightweight Charts...');
+                console.log(`[CHART] Data: ${candlestickData.length} candles, OBs=${orderBlocks?.length || 0}, FVGs=${fvgs?.length || 0}, Trades=${executedTrades?.length || 0}`);
+                
+                // Create chart
+                lightweightChart = LightweightCharts.createChart(chartContainer, {
+                    layout: {
+                        background: { color: '#0f172a' },
+                        textColor: '#e2e8f0',
+                    },
+                    grid: {
+                        vertLines: { color: '#334155' },
+                        horzLines: { color: '#334155' },
+                    },
+                    width: chartContainer.clientWidth,
+                    height: 400,
+                    timeScale: {
+                        timeVisible: true,
+                        secondsVisible: false,
+                    },
+                    rightPriceScale: {
+                        borderColor: '#334155',
+                    },
+                });
+                
+                // Create candlestick series
+                candlestickSeries = lightweightChart.addCandlestickSeries({
+                    upColor: '#10b981',
+                    downColor: '#ef4444',
+                    borderVisible: true,
+                    wickUpColor: '#10b981',
+                    wickDownColor: '#ef4444',
+                });
+                
+                // Convert and set data
+                const chartData = candlestickData.map(candle => ({
+                    time: candle.time,
+                    open: candle.open,
+                    high: candle.high,
+                    low: candle.low,
+                    close: candle.close,
+                }));
+                
+                candlestickSeries.setData(chartData);
+                
+                // Draw Order Blocks
+                if (orderBlocks && orderBlocks.length > 0) {
+                    orderBlocks.forEach(ob => {
+                        try {
+                            const color = ob.type === 'Bullish' ? 'rgba(16, 185, 129, 0.3)' : 'rgba(239, 68, 68, 0.3)';
+                            const lineColor = ob.type === 'Bullish' ? '#10b981' : '#ef4444';
+                            
+                            // High line
+                            const highLine = candlestickSeries.createPriceLine({
+                                price: ob.high,
+                                color: lineColor,
+                                lineWidth: 2,
+                                lineStyle: LightweightCharts.LineStyle.Solid,
+                                axisLabelVisible: true,
+                                title: `OB ${ob.type} High`,
+                            });
+                            orderBlockPriceLines.push(highLine);
+                            
+                            // Low line
+                            const lowLine = candlestickSeries.createPriceLine({
+                                price: ob.low,
+                                color: lineColor,
+                                lineWidth: 2,
+                                lineStyle: LightweightCharts.LineStyle.Solid,
+                                axisLabelVisible: true,
+                                title: `OB ${ob.type} Low`,
+                            });
+                            orderBlockPriceLines.push(lowLine);
+                        } catch(e) {
+                            console.warn('[CHART] Error drawing Order Block:', e);
+                        }
+                    });
+                    console.log(`[CHART] ✅ Drew ${orderBlocks.length} Order Blocks`);
+                }
+                
+                // Draw FVGs
+                if (fvgs && fvgs.length > 0) {
+                    fvgs.forEach(fvg => {
+                        try {
+                            const color = fvg.type === 'Bullish' ? 'rgba(16, 185, 129, 0.2)' : 'rgba(239, 68, 68, 0.2)';
+                            const lineColor = fvg.type === 'Bullish' ? '#10b981' : '#ef4444';
+                            
+                            // Top line
+                            const topLine = candlestickSeries.createPriceLine({
+                                price: fvg.top,
+                                color: lineColor,
+                                lineWidth: 1,
+                                lineStyle: LightweightCharts.LineStyle.Dashed,
+                                axisLabelVisible: true,
+                                title: `FVG ${fvg.type} Top`,
+                            });
+                            fvgPriceLines.push(topLine);
+                            
+                            // Bottom line
+                            const bottomLine = candlestickSeries.createPriceLine({
+                                price: fvg.bottom,
+                                color: lineColor,
+                                lineWidth: 1,
+                                lineStyle: LightweightCharts.LineStyle.Dashed,
+                                axisLabelVisible: true,
+                                title: `FVG ${fvg.type} Bottom`,
+                            });
+                            fvgPriceLines.push(bottomLine);
+                        } catch(e) {
+                            console.warn('[CHART] Error drawing FVG:', e);
+                        }
+                    });
+                    console.log(`[CHART] ✅ Drew ${fvgs.length} FVGs`);
+                }
+                
+                // Draw Trade Markers
+                if (executedTrades && executedTrades.length > 0) {
+                    executedTrades.forEach(trade => {
+                        try {
+                            const position = trade.type === 'BUY' ? 'belowBar' : 'aboveBar';
+                            const color = trade.result === 'WIN' ? '#10b981' : trade.result === 'LOSS' ? '#ef4444' : '#f59e0b';
+                            const shape = trade.type === 'BUY' ? 'arrowUp' : 'arrowDown';
+                            
+                            tradeMarkers.push({
+                                time: trade.entry_time || trade.time || candlestickData[candlestickData.length - 1].time,
+                                position: position,
+                                color: color,
+                                shape: shape,
+                                text: `${trade.type} @ ${trade.entry}`,
+                            });
+                        } catch(e) {
+                            console.warn('[CHART] Error creating trade marker:', e);
+                        }
+                    });
+                    
+                    if (tradeMarkers.length > 0) {
+                        candlestickSeries.setMarkers(tradeMarkers);
+                        console.log(`[CHART] ✅ Added ${tradeMarkers.length} trade markers`);
+                    }
+                }
+                
+                // Fit content
+                lightweightChart.timeScale().fitContent();
+                
+                // Update price display
+                if (candlestickData.length > 0) {
+                    const latestPrice = candlestickData[candlestickData.length - 1].close;
+                    const priceElement = document.getElementById('currentPrice');
+                    if (priceElement) {
+                        priceElement.textContent = `$${latestPrice.toFixed(2)}`;
+                    }
+                    
+                    const contractElement = document.getElementById('contractName');
+                    if (contractElement) {
+                        contractElement.textContent = contractName || '--';
+                    }
+                    
+                    const lastUpdateElement = document.getElementById('lastUpdate');
+                    if (lastUpdateElement) {
+                        const now = new Date();
+                        lastUpdateElement.textContent = `تحديث: ${now.toLocaleTimeString('ar-SA')} (${dataSource})`;
+                    }
+                }
+                
+                // Handle resize
+                const resizeObserver = new ResizeObserver(entries => {
+                    if (lightweightChart && entries.length > 0) {
+                        const { width, height } = entries[0].contentRect;
+                        lightweightChart.applyOptions({ width, height });
+                    }
+                });
+                resizeObserver.observe(chartContainer);
+                
+                console.log(`[CHART] ✅ Lightweight Chart created with ${candlestickData.length} candles`);
+                
+            } catch(error) {
+                console.error('[CHART] ❌ Error creating Lightweight Chart:', error);
+                chartContainer.innerHTML = `<div style="padding:50px; text-align:center; color:#ef4444;">❌ خطأ في إنشاء الرسم البياني: ${error.message}<br><small>${error.stack}</small></div>`;
+            }
+        }
+
+        window.updateChart = async function updateChart() {
+            await loadChartData();
+        }
+        
+        async function loadChartData() {
+            try {
+                console.log('[CHART] 📊 Loading chart data from API...');
+                addLog('[CHART] 📊 Loading chart data...');
+                
+                const res = await fetch('/api/chart_data');
+                if (!res.ok) {
+                    throw new Error(`HTTP ${res.status}`);
+                }
+                
+                const data = await res.json();
+                console.log('[CHART] 📥 Chart data response:', data);
+                
+                if (data.success && data.candles && data.candles.length > 0) {
+                    applyChartData(data, data.contract, data.data_source);
+                    addLog(`[CHART] ✅ Chart loaded: ${data.candles.length} candles`);
+                } else {
+                    console.warn('[CHART] ⚠️ No chart data available:', data.message || 'Unknown error');
+                    addLog(`[CHART] ⚠️ ${data.message || 'No chart data available'}`);
+                }
+            } catch (error) {
+                console.error('[CHART] ❌ Error loading chart data:', error);
+                addLog(`[CHART] ❌ Error: ${error.message}`);
+            }
+        }
+
+        function startChartUpdates() {
+            // الشارت معطل مؤقتاً
+            console.log('[CHART] Chart updates are temporarily disabled');
+            addLog('[INFO] Chart is temporarily disabled');
+            return;
+            
+            /* الكود الأصلي معطل
+            // Show chart card
+            document.getElementById('chartCard').style.display = 'block';
+            
+            // Initial load
+            // updateChart(); // Chart disabled
+            if (chartUpdateInterval) {
+                clearInterval(chartUpdateInterval);
+                chartUpdateInterval = null;
+            }
+            addLog('[REALTIME] Chart streaming via WebSocket (HTTP fallback ready).');
+            */
+        }
+
+        // تعريف connect في window مباشرة
+        window.connect = async function connect() {
+            const env = document.getElementById('env').value;
+            const username = document.getElementById('username').value;
+            const apiKey = document.getElementById('apiKey').value;
+            const alert = document.getElementById('connAlert');
+
+            if (!username || !apiKey) {
+                alert.innerHTML = '<div class="alert alert-error">❌ الرجاء ملء جميع الحقول</div>';
+                return;
+            }
+
+            alert.innerHTML = '<div class="alert alert-info">⏳ جاري الاتصال الحقيقي...</div>';
+            addLog(`[CONNECT] Connecting to ${env} with username: ${username}`);
+
+            try {
+                const res = await fetch('/api/connect', {
+                    method: 'POST',
+                    headers: {'Content-Type': 'application/json'},
+                    body: JSON.stringify({environment: env, username, api_key: apiKey})
+                });
+
+                const data = await res.json();
+
+                if (data.success) {
+                    alert.innerHTML = '<div class="alert alert-success">✅ اتصال حقيقي نشط!</div>';
+                    document.getElementById('connectBtn').style.display = 'none';
+                    document.getElementById('disconnectBtn').style.display = 'block';
+                    addLog(`[CONNECT] ✅ Connected to ProjectX successfully`);
+                    addLog(`[ACCOUNT] Balance: $${data.account_info.balance}`);
+                    
+                    // عرض قائمة الحسابات
+                    await loadAccounts();
+                    
+                    // جلب العقود تلقائياً
+                    await loadContracts();
+                    
+                    // جلب بيانات الشارت الحقيقية عند الاتصال
+                    setTimeout(() => {
+                        loadChartData();
+                    }, 2000);
+                    
+                    startAutoUpdate();
+                } else {
+                    alert.innerHTML = `<div class="alert alert-error">❌ ${data.message}</div>`;
+                    addLog(`[ERROR] Connection failed: ${data.message}`);
+                }
+            } catch (error) {
+                alert.innerHTML = `<div class="alert alert-error">❌ ${error.message}</div>`;
+                addLog(`[ERROR] ${error.message}`);
+            }
+        };
+
+        async function loadAccounts() {
+            try {
+                const res = await fetch('/api/accounts');
+                const data = await res.json();
+
+                if (data.accounts && data.accounts.length > 0) {
+                    const select = document.getElementById('accountSelect');
+                    select.innerHTML = '<option value="">-- اختر الحساب --</option>';
+                    
+                    data.accounts.forEach(acc => {
+                        const option = document.createElement('option');
+                        option.value = acc.id;
+                        option.textContent = `${acc.name} - $${acc.balance.toLocaleString()} ${acc.canTrade ? '✅' : '❌'}`;
+                        select.appendChild(option);
+                    });
+                    
+                    document.getElementById('accountSelection').style.display = 'block';
+                    addLog(`[ACCOUNTS] Found ${data.accounts.length} account(s)`);
+                }
+            } catch (error) {
+                addLog(`[ERROR] Failed to load accounts: ${error.message}`);
+            }
+        }
+
+        window.selectAccount = async function selectAccount() {
+            const accountId = document.getElementById('accountSelect').value;
+            
+            if (!accountId) {
+                alert('الرجاء اختيار حساب');
+                return;
+            }
+
+            try {
+                const res = await fetch('/api/select_account', {
+                    method: 'POST',
+                    headers: {'Content-Type': 'application/json'},
+                    body: JSON.stringify({account_id: parseInt(accountId)})
+                });
+
+                const data = await res.json();
+
+                if (data.success) {
+                    addLog(`[ACCOUNT] ✅ Selected: ${data.account.account_name}`);
+                    addLog(`[ACCOUNT] Balance: $${data.account.balance.toLocaleString()}`);
+                    document.getElementById('accountSelection').innerHTML = 
+                        `<div class="alert alert-success">✅ حساب نشط: ${data.account.account_name}</div>`;
+                    
+                    // تحديث اسم الحساب في بطاقة الحالة
+                    document.getElementById('selectedAccount').textContent = data.account.account_name;
+                    
+                    // إظهار بطاقة اختيار Contract وبطاقة الحالة
+                    document.getElementById('contractCard').style.display = 'block';
+                    document.getElementById('apiStatusCard').style.display = 'block';
+                    
+                    // بعد اختيار الحساب، نبدأ تحديث المراكز والأوامر
+                    startPositionMonitoring();
+                    
+                    // بدء تحديث الرسم البياني
+                    // startChartUpdates(); // Chart disabled
+                } else {
+                    alert(data.message);
+                }
+            } catch (error) {
+                addLog(`[ERROR] ${error.message}`);
+            }
+        }
+
+        async function loadContracts() {
+            try {
+                const res = await fetch('/api/contracts');
+                const data = await res.json();
+                
+                if (data.success && data.contracts && data.contracts.length > 0) {
+                    const select = document.getElementById('contractSelect');
+                    select.innerHTML = '<option value="">-- اختر العقد --</option>';
+                    
+                    data.contracts.forEach(contract => {
+                        const option = document.createElement('option');
+                        option.value = contract.id;
+                        option.textContent = `${contract.name} - ${contract.description} ${contract.activeContract ? '✅' : ''}`;
+                        if (contract.activeContract) {
+                            option.selected = true;
+                            selectedContract = contract.id;
+                        }
+                        select.appendChild(option);
+                    });
+                    
+                    // Auto-select active contract
+                    if (data.active_contract) {
+                        selectedContract = data.active_contract;
+                        // Select in dropdown
+                        const select = document.getElementById('contractSelect');
+                        if (select) {
+                            select.value = data.active_contract;
+                        }
+                        // Call API to select
+                        try {
+                            const res = await fetch('/api/select_contract', {
+                                method: 'POST',
+                                headers: {'Content-Type': 'application/json'},
+                                body: JSON.stringify({contract_id: data.active_contract})
+                            });
+                            const result = await res.json();
+                            if (result.success) {
+                                addLog(`[CONTRACT] ✅ Auto-selected: ${data.active_contract}`);
+                                // updateChart(); // Chart disabled
+                            }
+                        } catch(e) {
+                            console.error('[CONTRACT] Error selecting:', e);
+                        }
+                    }
+                }
+            } catch (error) {
+                console.error('[CONTRACTS] Error:', error);
+            }
+        }
+        
+        // مراقبة المراكز والأوامر
+        let monitoringInterval = null;
+        
+        async function updateAccountInfo() {
+            try {
+                const res = await fetch('/api/account');
+                if (res.ok) {
+                    const data = await res.json();
+                    renderAccountInfo(data);
+                }
+            } catch (error) {
+                console.error('[ACCOUNT] Error updating balance:', error);
+            }
+        }
+        
+        function startPositionMonitoring() {
+            if (monitoringInterval) {
+                clearInterval(monitoringInterval);
+                monitoringInterval = null;
+            }
+            updatePositions();
+            updateOrders();
+            updateAccountInfo();
+            addLog('[REALTIME] Positions & orders streaming via WebSocket.');
+        }
+
+        async function updatePositions() {
+            try {
+                console.log('[POSITIONS] Fetching positions...');
+                const res = await fetch('/api/positions');
+                
+                if (!res.ok) {
+                    console.error(`[POSITIONS] HTTP Error ${res.status}`);
+                    return;
+                }
+                
+                const data = await res.json();
+                console.log(`[POSITIONS] Response:`, data);
+
+                renderPositions(data.positions || []);
+            } catch (error) {
+                console.error('[POSITIONS] ❌ Error:', error);
+                addLog(`[ERROR] Positions: ${error.message}`);
+            }
+        }
+
+        async function updateOrders() {
+            try {
+                console.log('[ORDERS] Fetching orders...');
+                const res = await fetch('/api/orders');
+                
+                if (!res.ok) {
+                    console.error(`[ORDERS] HTTP Error ${res.status}`);
+                    return;
+                }
+                
+                const data = await res.json();
+                console.log(`[ORDERS] Response:`, data);
+
+                renderOrders(data.orders || []);
+            } catch (error) {
+                console.error('[ORDERS] ❌ Error:', error);
+                addLog(`[ERROR] Orders: ${error.message}`);
+            }
+        }
+
+        window.closePosition = async function closePosition(contractId) {
+            if (!confirm(`هل أنت متأكد من إغلاق المركز: ${contractId}?`)) return;
+            
+            try {
+                const res = await fetch('/api/close_position', {
+                    method: 'POST',
+                    headers: {'Content-Type': 'application/json'},
+                    body: JSON.stringify({contract_id: contractId})
+                });
+
+                const data = await res.json();
+
+                if (data.success) {
+                    addLog(`[POSITION] ✅ Closed: ${contractId}`);
+                    updatePositions();
+                } else {
+                    addLog(`[ERROR] ${data.message}`);
+                }
+            } catch (error) {
+                addLog(`[ERROR] ${error.message}`);
+            }
+        }
+
+        window.cancelOrder = async function cancelOrder(orderId) {
+            // يمكن إضافة API endpoint لإلغاء الأمر
+            addLog(`[INFO] Cancel order ${orderId} - Coming soon`);
+        }
+
+        window.selectContract = async function selectContract() {
+            const contractId = document.getElementById('contractSelect').value;
+            const alert = document.getElementById('contractAlert');
+            
+            try {
+                const res = await fetch('/api/select_contract', {
+                    method: 'POST',
+                    headers: {'Content-Type': 'application/json'},
+                    body: JSON.stringify({contract_id: contractId})
+                });
+
+                const data = await res.json();
+
+                if (data.success) {
+                    selectedContract = contractId; // تحديث العقد المختار
+                    alert.innerHTML = '<div class="alert alert-success">✅ تم اختيار العقد</div>';
+                    addLog(`[CONTRACT] ✅ Selected: ${contractId}`);
+                    
+                    // تحديث الرسم البياني بالعقد الجديد
+                    // updateChart(); // Chart disabled
+                    
+                    // إظهار بطاقة التداول السريع
+                    document.getElementById('quickTradeCard').style.display = 'block';
+                    document.getElementById('executedTradesCard').style.display = 'block';
+                    document.getElementById('skippedTradesCard').style.display = 'block';
+                } else {
+                    alert.innerHTML = `<div class="alert alert-error">❌ ${data.message}</div>`;
+                }
+            } catch (error) {
+                alert.innerHTML = `<div class="alert alert-error">❌ ${error.message}</div>`;
+            }
+        }
+
+        window.executeTrade = async function executeTrade() {
+            const type = document.getElementById('tradeType').value;
+            const entry = parseFloat(document.getElementById('tradeEntry').value);
+            const sl = parseFloat(document.getElementById('tradeSL').value);
+            const tp = parseFloat(document.getElementById('tradeTP').value);
+            const strength = parseFloat(document.getElementById('tradeStrength').value);
+            const alert = document.getElementById('tradeAlert');
+
+            if (!entry || !sl || !tp) {
+                alert.innerHTML = '<div class="alert alert-error">❌ الرجاء ملء جميع الحقول</div>';
+                return;
+            }
+
+            alert.innerHTML = '<div class="alert alert-info">⏳ جاري تقييم Setup بواسطة ML...</div>';
+            addLog(`[TRADE] Evaluating ${type} setup: Entry=${entry}, SL=${sl}, TP=${tp}`);
+
+            try {
+                const res = await fetch('/api/place_trade', {
+                    method: 'POST',
+                    headers: {'Content-Type': 'application/json'},
+                    body: JSON.stringify({
+                        setup: {
+                            type: type,
+                            entry: entry,
+                            sl: sl,
+                            tp: tp,
+                            strength: strength,
+                            priority: 10
+                        }
+                    })
+                });
+
+                const data = await res.json();
+
+                if (data.success) {
+                    if (data.decision === 'TAKE') {
+                        alert.innerHTML = `<div class="alert alert-success">✅ ML: TAKE (${(data.probability * 100).toFixed(1)}%) | Order ID: ${data.order_id}</div>`;
+                        addLog(`[TRADE] ✅ ML Decision: TAKE (${(data.probability * 100).toFixed(1)}%)`);
+                        addLog(`[ORDER] Order placed: ID ${data.order_id}`);
+                        
+                        // تحديث المراكز والأوامر
+                        setTimeout(() => {
+                            updatePositions();
+                            updateOrders();
+                        }, 1000);
+                    } else {
+                        alert.innerHTML = `<div class="alert alert-warning">⏭️ ML: SKIP (${(data.probability * 100).toFixed(1)}%)</div>`;
+                        addLog(`[TRADE] ⏭️ ML Decision: SKIP (${(data.probability * 100).toFixed(1)}%)`);
+                    }
+                } else {
+                    alert.innerHTML = `<div class="alert alert-error">❌ ${data.message}</div>`;
+                    addLog(`[ERROR] ${data.message}`);
+                }
+            } catch (error) {
+                alert.innerHTML = `<div class="alert alert-error">❌ ${error.message}</div>`;
+                addLog(`[ERROR] ${error.message}`);
+            }
+        }
+
+        window.executeTradeDirect = async function executeTradeDirect() {
+            const type = document.getElementById('tradeType').value;
+            const entry = parseFloat(document.getElementById('tradeEntry').value);
+            const sl = parseFloat(document.getElementById('tradeSL').value);
+            const tp = parseFloat(document.getElementById('tradeTP').value);
+            const alert = document.getElementById('tradeAlert');
+
+            if (!entry || !sl || !tp) {
+                alert.innerHTML = '<div class="alert alert-error">❌ الرجاء ملء جميع الحقول</div>';
+                return;
+            }
+
+            // تأكيد قبل التنفيذ
+            if (!confirm(`⚠️ تنفيذ صفقة ${type} مباشرة:\nEntry: ${entry}\nSL: ${sl}\nTP: ${tp}\n\nهل أنت متأكد؟`)) {
+                return;
+            }
+
+            alert.innerHTML = '<div class="alert alert-info">⏳ جاري تنفيذ الصفقة...</div>';
+            addLog(`[TRADE] ⚡ Executing DIRECT ${type}: Entry=${entry}, SL=${sl}, TP=${tp}`);
+
+            try {
+                const res = await fetch('/api/place_trade_direct', {
+                    method: 'POST',
+                    headers: {'Content-Type': 'application/json'},
+                    body: JSON.stringify({
+                        setup: {
+                            type: type,
+                            entry: entry,
+                            sl: sl,
+                            tp: tp
+                        }
+                    })
+                });
+
+                const data = await res.json();
+
+                if (data.success) {
+                    alert.innerHTML = `<div class="alert alert-success">
+                        ✅ تم تنفيذ الصفقة بنجاح!<br>
+                        Order ID: ${data.order_id}<br>
+                        ${data.sl_order ? `SL Order: ${data.sl_order}` : ''}<br>
+                        ${data.tp_order ? `TP Order: ${data.tp_order}` : ''}
+                    </div>`;
+                    addLog(`[TRADE] ✅ DIRECT Trade executed: Order ID ${data.order_id}`);
+                    addLog(`[ORDER] SL: ${data.sl_order || 'Failed'}, TP: ${data.tp_order || 'Failed'}`);
+                    
+                    // تحديث المراكز والأوامر
+                    setTimeout(() => {
+                        updatePositions();
+                        updateOrders();
+                        updateAccountInfo();
+                    }, 1000);
+                } else {
+                    alert.innerHTML = `<div class="alert alert-error">❌ ${data.message}</div>`;
+                    addLog(`[ERROR] Trade failed: ${data.message}`);
+                }
+            } catch (error) {
+                alert.innerHTML = `<div class="alert alert-error">❌ ${error.message}</div>`;
+                addLog(`[ERROR] ${error.message}`);
+            }
+        }
+
+        async function disconnect() {
+            try {
+                const res = await fetch('/api/disconnect', {method: 'POST'});
+                const data = await res.json();
+
+                document.getElementById('connectBtn').style.display = 'block';
+                document.getElementById('disconnectBtn').style.display = 'none';
+                document.getElementById('connAlert').innerHTML = '';
+                document.getElementById('startBtn').disabled = true;
+
+                addLog(`[DISCONNECT] Disconnected from ProjectX`);
+                stopAutoUpdate();
+            } catch (error) {
+                addLog(`[ERROR] ${error.message}`);
+            }
+        }
+        
+        // تعيين disconnect في window
+        window.disconnect = disconnect;
+
+        window.uploadModel = async function uploadModel() {
+            const file = document.getElementById('modelFile').files[0];
+            if (!file) return;
+
+            const alert = document.getElementById('modelAlert');
+            alert.innerHTML = '<div class="alert alert-info">⏳ جاري رفع الموديل...</div>';
+            addLog(`[MODEL] Uploading: ${file.name}`);
+
+            const formData = new FormData();
+            formData.append('model', file);
+
+            try {
+                const res = await fetch('/api/upload_model', {method: 'POST', body: formData});
+                const data = await res.json();
+
+                if (data.success) {
+                    alert.innerHTML = '<div class="alert alert-success">✅ تم رفع الموديل!</div>';
+                    addLog(`[MODEL] ✅ ${data.message}`);
+                    document.getElementById('startBtn').disabled = false;
+                } else {
+                    alert.innerHTML = `<div class="alert alert-error">❌ ${data.message}</div>`;
+                    addLog(`[ERROR] ${data.message}`);
+                }
+            } catch (error) {
+                alert.innerHTML = `<div class="alert alert-error">❌ ${error.message}</div>`;
+                addLog(`[ERROR] ${error.message}`);
+            }
+        }
+
+        window.startTrading = async function startTrading() {
+            try {
+                const res = await fetch('/api/start_trading', {method: 'POST'});
+                const data = await res.json();
+
+                if (data.success) {
+                    document.getElementById('startBtn').style.display = 'none';
+                    document.getElementById('stopBtn').style.display = 'block';
+                    addLog(`[TRADING] ✅ Auto-trading started (REAL)`);
+                }
+            } catch (error) {
+                addLog(`[ERROR] ${error.message}`);
+            }
+        }
+
+        window.stopTrading = async function stopTrading() {
+            try {
+                const res = await fetch('/api/stop_trading', {method: 'POST'});
+                document.getElementById('startBtn').style.display = 'block';
+                document.getElementById('stopBtn').style.display = 'none';
+                addLog(`[TRADING] Stopped`);
+            } catch (error) {
+                addLog(`[ERROR] ${error.message}`);
+            }
+        }
+
+        function startAutoUpdate() {
+            if (updateInterval) return;
+            updateStatus();
+            updateAccount();
+            updateStats();
+            refreshExecutedTrades();
+            refreshSkippedTrades();
+            loadSettings();
+            updateCSVInfo();  // تحديث معلومات CSV
+            updateInterval = setInterval(() => {
+                updateStatus();
+                updateAccount();
+                updateStats();
+                refreshExecutedTrades();
+                refreshSkippedTrades();
+                loadSettings();
+                updateCSVInfo();  // تحديث معلومات CSV كل 15 ثانية
+            }, 15000);
+            addLog('[REALTIME] HTTP fallback refresh every 15s (WebSocket live).');
+        }
+
+        function stopAutoUpdate() {
+            if (updateInterval) {
+                clearInterval(updateInterval);
+                updateInterval = null;
+            }
+        }
+
+        async function updateStatus() {
+            try {
+                const res = await fetch('/api/status');
+                const data = await res.json();
+                if (data) {
+                    console.log('[STATUS] Fetched status from API:', data);
+                    renderStatus(data);
+                } else {
+                    console.warn('[STATUS] No data received from API');
+                }
+            } catch (error) {
+                console.warn('[STATUS] Error fetching status:', error);
+                // تحديث البار بحالة افتراضية عند الخطأ
+                renderStatus({
+                    is_connected: false,
+                    model_loaded: false,
+                    is_trading: false
+                });
+            }
+        }
+
+        async function updateAccount() {
+            try {
+                const res = await fetch('/api/account');
+                const data = await res.json();
+                if (!data.error) {
+                    renderAccountInfo(data);
+                }
+            } catch (error) {
+                console.warn('[ACCOUNT] Error:', error);
+            }
+        }
+
+        async function updateStats() {
+            try {
+                const res = await fetch('/api/stats');
+                const data = await res.json();
+                renderStatsUI(data);
+            } catch (error) {
+                console.warn('[STATS] Error:', error);
+            }
+        }
+
+        // Initialize
+        addLog('[SYSTEM] Ready. Connect to ProjectX API to start.');
+        
+        // عرض Chart بالبيانات التجريبية عند تحميل الصفحة
+        document.addEventListener('DOMContentLoaded', function() {
+            // تحديث الحالة عند تحميل الصفحة
+            updateStatus();
+            updateAccount();
+            updateStats();
+            
+            // بدء WebSocket connection
+            initRealtimeChannel();
+            
+            // عرض Chart تجريبي
+            setTimeout(() => {
+                if (typeof LightweightCharts !== 'undefined') {
+                    console.log('[CHART] Initializing with demo data...');
+                    const demoData = generateDemoData(6580, 100);
+                    displayTradingViewChart(demoData, 'CON.F.US.EP.U25', 'DEMO');
+                    addLog('[CHART] 📊 Demo chart loaded (connect to see real data)');
+                } else {
+                    console.error('[CHART] LightweightCharts not available');
+                }
+            }, 1000);
+            
+            // تحديث البيانات
+            refreshExecutedTrades();
+            refreshSkippedTrades();
+            loadSettings();
+            loadSettings();
+        });
+    </script>
+</body>
+</html>
+

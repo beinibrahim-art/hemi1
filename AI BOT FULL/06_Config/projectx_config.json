@@ -1,0 +1,23 @@
+{
+    "username": "YOUR_USERNAME_HERE",
+    "api_key": "YOUR_API_KEY_FROM_PROJECTX_DASHBOARD",
+    "environment": "TOPSTEP_X",
+    
+    "comments": {
+        "how_to_get_api_key": [
+            "1. Go to https://dashboard.projectx.com",
+            "2. Login to your account",
+            "3. Go to Settings > API Keys",
+            "4. Copy your API Key and paste above"
+        ],
+        "available_environments": [
+            "TOPSTEP_X",
+            "TRADEIFY",
+            "FUNDING_FUTURES",
+            "E8X",
+            "FXIFY_FUTURES"
+        ],
+        "security_note": "Keep this file secure! Do not share your API Key"
+    }
+}
+

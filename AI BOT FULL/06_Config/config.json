@@ -1,0 +1,88 @@
+{
+  "comment": "ملف إعدادات نظام ICT Backtest",
+  
+  "data": {
+    "folder": "C:\\Users\\hemi_\\Downloads\\GLBX-20251120-PREEJVW86N",
+    "symbol": "ESH5",
+    "comment": "مجلد البيانات والرمز المطلوب"
+  },
+  
+  "capital": {
+    "initial": 50000,
+    "risk_per_trade_pct": 0.01,
+    "comment": "رأس المال الابتدائي ونسبة المخاطرة (0.01 = 1%)"
+  },
+  
+  "order_blocks": {
+    "min_strength": 8,
+    "lookback_period": 20,
+    "retest_window_hours": 2,
+    "comment": "إعدادات Order Blocks"
+  },
+  
+  "fair_value_gaps": {
+    "min_gap_size": 2.0,
+    "comment": "الحد الأدنى لحجم FVG"
+  },
+  
+  "swing_points": {
+    "period": 3,
+    "comment": "عدد الشموع للتحقق من Swing Points"
+  },
+  
+  "entry_filters": {
+    "max_risk_points": 4.5,
+    "min_reward_points": 8.0,
+    "min_risk_reward": 2.0,
+    "comment": "معايير تصفية الصفقات"
+  },
+  
+  "killzones": {
+    "london": {
+      "start_hour": 2,
+      "end_hour": 5,
+      "priority": 10,
+      "comment": "London Killzone (UTC)"
+    },
+    "ny_am": {
+      "start_hour": 7,
+      "end_hour": 10,
+      "priority": 10,
+      "comment": "NY AM Killzone (UTC)"
+    },
+    "ny_pm": {
+      "start_hour": 13,
+      "end_hour": 17,
+      "priority": 9,
+      "comment": "NY PM Killzone (UTC)"
+    }
+  },
+  
+  "smart_targeting": {
+    "min_target": 10,
+    "max_target": 100,
+    "default_target": 15,
+    "swing_priority": 10,
+    "ob_priority": 7,
+    "fvg_priority": 5,
+    "comment": "إعدادات الأهداف الذكية"
+  },
+  
+  "trading": {
+    "max_trades_per_day": 3,
+    "timeframe_minutes": 5,
+    "comment": "عدد الصفقات اليومية والإطار الزمني"
+  },
+  
+  "backtesting": {
+    "max_days": null,
+    "comment": "عدد الأيام للاختبار (null = جميع الأيام)"
+  },
+  
+  "output": {
+    "folder": "C:\\Users\\hemi_\\Downloads\\GLBX-20251120-PREEJVW86N\\New folder",
+    "save_charts": false,
+    "comment": "مجلد النتائج وحفظ الرسوم البيانية"
+  }
+}
+
